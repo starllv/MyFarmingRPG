@@ -210,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.39430767, y: 1.8055477, z: -30.066658}
+  m_LocalPosition: {x: 6.6, y: -8.57, z: -30.066658}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,6 +368,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2020053899}
   - component: {fileID: 2020053898}
+  - component: {fileID: 2020053901}
+  - component: {fileID: 2020053900}
   m_Layer: 0
   m_Name: PlayerFollowVirtualCamera
   m_TagString: Untagged
@@ -423,13 +425,42 @@ Transform:
   m_GameObject: {fileID: 2020053897}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.39430767, y: 1.8055477, z: -30.066658}
+  m_LocalPosition: {x: 6.6, y: -8.57, z: -30.066658}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1306873535}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2020053900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020053897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd4b863f6c3e55a4cb46a056db76d006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2020053901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020053897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2fba25a5cd15594e8f050a11e386c80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ConfineMode: 0
+  m_BoundingVolume: {fileID: 0}
+  m_BoundingShape2D: {fileID: 0}
+  m_ConfineScreenEdges: 1
+  m_Damping: 0
 --- !u!1 &359370801807583070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,7 +1123,7 @@ Transform:
   m_GameObject: {fileID: 8537469566956835441}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.39430767, y: 1.8055477, z: -20.066658}
+  m_LocalPosition: {x: 6.6, y: -8.57, z: -20.066658}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
