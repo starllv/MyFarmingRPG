@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
+    [ItemCodeDescription]
     [SerializeField]
     private int _itemCode;
 
