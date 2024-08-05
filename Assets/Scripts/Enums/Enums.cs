@@ -28,3 +28,10 @@ public enum ItemType
     none,
     count
 }
+
+public enum InventoryLocation 
+{
+    player,
+    chest,
+    count
+}

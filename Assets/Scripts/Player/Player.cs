@@ -30,13 +30,11 @@ public class Player : SingletonMonoBehaviour<Player>
     private bool idleRight;
     private bool idleUp;
     private bool idleDown;
+    private Camera mainCamera;
 
     private Rigidbody2D rigidBody2D;
-
     private Direction playerDirection;
-
     private float movementSpeed;
-
     private bool _playerInputIsDisabled = false;
 
     public bool PlayerInputIsDisabled { get => _playerInputIsDisabled; set => _playerInputIsDisabled = value; }
@@ -46,6 +44,8 @@ public class Player : SingletonMonoBehaviour<Player>
         base.Awake();
 
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        mainCamera = Camera.main;
     }
 
     private void Update()
@@ -164,5 +164,10 @@ public class Player : SingletonMonoBehaviour<Player>
         Vector2 move = new Vector2(xInput * movementSpeed * Time.deltaTime, 
                                     yInput * movementSpeed * Time.deltaTime);
         rigidBody2D.MovePosition(rigidBody2D.position + move);
+    }
+
+    public Vector3 GetPlayerViewportPosition() {
+
+        return mainCamera.WorldToViewportPoint(transform.position);
     }
 }
