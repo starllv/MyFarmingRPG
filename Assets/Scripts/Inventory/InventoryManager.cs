@@ -7,11 +7,9 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
 
     public List<InventoryItem>[] inventoryLists;
 
-    [HideInInspector]
-    public int[] inventoryListCapacityIntArray;
+    [HideInInspector] public int[] inventoryListCapacityIntArray;
 
-    [SerializeField]
-    private SO_ItemList itemList = null;
+    [SerializeField] private SO_ItemList itemList = null;
 
     protected override void Awake() {
 
@@ -85,7 +83,7 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         inventoryItem.itemQuantity = 1;
         inventoryList.Add(inventoryItem);
 
-        DebugPrintInventoryList(inventoryList);
+        // DebugPrintInventoryList(inventoryList);
     }
 
     private void AddItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position) {
@@ -97,8 +95,8 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         inventoryItem.itemCode = itemCode;
         inventoryList[position] = inventoryItem;
 
-        Debug.ClearDeveloperConsole();
-        DebugPrintInventoryList(inventoryList);
+        // Debug.ClearDeveloperConsole();
+        // DebugPrintInventoryList(inventoryList);
     }
 
     public ItemDetails GetItemDetails(int itemCode) {
@@ -112,11 +110,11 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         }
     }
 
-    private void DebugPrintInventoryList(List<InventoryItem> inventoryList) {
+    // private void DebugPrintInventoryList(List<InventoryItem> inventoryList) {
 
-        foreach (InventoryItem inventoryItem in inventoryList) {
-            Debug.Log("Item Description: " + InventoryManager.Instance.GetItemDetails(inventoryItem.itemCode).itemDescription + "    Item Quantity: " + inventoryItem.itemQuantity);
-        }
-        Debug.Log("***********************************************************************");
-    }
+    //     foreach (InventoryItem inventoryItem in inventoryList) {
+    //         Debug.Log("Item Description: " + InventoryManager.Instance.GetItemDetails(inventoryItem.itemCode).itemDescription + "    Item Quantity: " + inventoryItem.itemQuantity);
+    //     }
+    //     Debug.Log("***********************************************************************");
+    // }
 }
