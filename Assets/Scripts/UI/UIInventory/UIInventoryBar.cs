@@ -6,6 +6,7 @@ public class UIInventoryBar : MonoBehaviour
 {
     [SerializeField] private Sprite blank16x16Sprite = null;
     [SerializeField] private UIInventorySlot[] inventorySlot = null;
+    public GameObject inventoryBarDraggedItem;
     private RectTransform rectTransform;
     private bool _isInventoryBarPositionBottom = true;
     public bool IsInventoryBarPositionBottom { get => _isInventoryBarPositionBottom; set => _isInventoryBarPositionBottom = value; }

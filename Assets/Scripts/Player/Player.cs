@@ -52,21 +52,24 @@ public class Player : SingletonMonoBehaviour<Player>
     {
         #region Player Input
 
-        ResetAnimationTriggers();
+        if (!PlayerInputIsDisabled) {
 
-        PlayerMovementInput();
+            ResetAnimationTriggers();
 
-        PlayerWalkInput();
+            PlayerMovementInput();
 
-        // Send event to any listeners for player movement input
-        EventHandler.CallMovementEvent(xInput, yInput, isWalking, 
-                            isRunning, isIdle, isCarrying, 
-                            toolEffect, 
-                            isUsingToolLeft, isUsingToolRight, isUsingToolUp, isUsingToolDown, 
-                            isLiftingToolLeft, isLiftingToolRight, isLiftingToolUp, isLiftingToolDown, 
-                            isPickingLeft, isPickingRight, isPickingUp, isPickingDown, 
-                            isSwingingToolLeft, isSwingingToolRight, isSwingingToolUp, isSwingingToolDown, 
-                            false, false, false, false);
+            PlayerWalkInput();
+
+            // Send event to any listeners for player movement input
+            EventHandler.CallMovementEvent(xInput, yInput, isWalking, 
+                                isRunning, isIdle, isCarrying, 
+                                toolEffect, 
+                                isUsingToolLeft, isUsingToolRight, isUsingToolUp, isUsingToolDown, 
+                                isLiftingToolLeft, isLiftingToolRight, isLiftingToolUp, isLiftingToolDown, 
+                                isPickingLeft, isPickingRight, isPickingUp, isPickingDown, 
+                                isSwingingToolLeft, isSwingingToolRight, isSwingingToolUp, isSwingingToolDown, 
+                                false, false, false, false);
+        }
 
         #endregion
     }
@@ -164,6 +167,40 @@ public class Player : SingletonMonoBehaviour<Player>
         Vector2 move = new Vector2(xInput * movementSpeed * Time.deltaTime, 
                                     yInput * movementSpeed * Time.deltaTime);
         rigidBody2D.MovePosition(rigidBody2D.position + move);
+    }
+
+    private void ResetMovement() {
+
+        xInput = 0f;
+        yInput = 0f;
+        isRunning = false;
+        isWalking = false;
+        isIdle = true;
+    }
+
+    public void DisablePlayerInputAndResetMovement() {
+
+        DisablePlayerInput();
+        ResetMovement();
+
+        EventHandler.CallMovementEvent(xInput, yInput, isWalking, 
+                                isRunning, isIdle, isCarrying, 
+                                toolEffect, 
+                                isUsingToolLeft, isUsingToolRight, isUsingToolUp, isUsingToolDown, 
+                                isLiftingToolLeft, isLiftingToolRight, isLiftingToolUp, isLiftingToolDown, 
+                                isPickingLeft, isPickingRight, isPickingUp, isPickingDown, 
+                                isSwingingToolLeft, isSwingingToolRight, isSwingingToolUp, isSwingingToolDown, 
+                                false, false, false, false);
+    }
+
+    public void DisablePlayerInput() {
+
+        PlayerInputIsDisabled = true;
+    }
+
+    public void EnablePlayerInput() {
+
+        PlayerInputIsDisabled = false;
     }
 
     public Vector3 GetPlayerViewportPosition() {

@@ -6,7 +6,7 @@ public class ItemNudge : MonoBehaviour
     private WaitForSeconds pause;
 
     private bool isAnimating = false;
-
+    // 脚本被初始化时运行一次
     private void Awake() {
         pause = new WaitForSeconds(0.04f);
     }

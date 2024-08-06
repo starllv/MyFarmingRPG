@@ -2,3 +2,9 @@ LICENSE
 Library/
 Logs/
 Temp/
+.vscode/
+*.csproj
+MyFarmingRPG.sln
+.gitignore~
+..gitignore~
+..gitignore.un~
