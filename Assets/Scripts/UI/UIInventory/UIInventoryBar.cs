@@ -24,6 +24,7 @@ public class UIInventoryBar : MonoBehaviour
     }
 
     private void Update() {
+
         SwitchInventoryBarPosition();
     }
 
@@ -65,6 +66,7 @@ public class UIInventoryBar : MonoBehaviour
     }
 
     private void SwitchInventoryBarPosition() {
+        
         Vector3 playerViewportPosition = Player.Instance.GetPlayerViewportPosition();
 
         if (playerViewportPosition.y > 0.3f && IsInventoryBarPositionBottom == false) {

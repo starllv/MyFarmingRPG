@@ -19,6 +19,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     [SerializeField] private UIInventoryBar inventoryBar = null;  // 用于设置物品栏，即物品槽的父级，因为添加了SerializeField参数，所以在unity中的Inspector中可见
     [SerializeField] private GameObject itemPrefab = null;       // 用于设置实例化物品时，使用的物品预制件，因为添加了SerializeField参数，所以在unity中的Inspector中可见
+    [SerializeField] private int slotNumber = 0;                // 记录当前槽位是第几个槽位
+    
     // 此函数在脚本刚开始运行时运行一次，且运行在Update函数前，即一帧更新之前
     private void Start() {
         // 初始化，获取主摄像机
@@ -73,8 +75,10 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             Destroy(draggedItem);
             // 当拖动结束时，判断鼠标指向的位置是否有游戏中物体，且该物体存在UIInventorySlot组件，即指向的物体是物品栏UI中的物品槽，此处用于交换物品栏中物品的位置
             if (eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.GetComponent<UIInventorySlot>() != null) {
-
-
+                // 获取当前鼠标指向的槽位
+                int toSlotNumber = eventData.pointerCurrentRaycast.gameObject.GetComponent<UIInventorySlot>().slotNumber;
+                // 调用InventoryManager中的函数交换当前槽位的物品到鼠标指向的位置
+                InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);                
             }
             else {
                 // 若鼠标指向的位置没有物体，且拖动的物品可以放下，则在鼠标指向的位置放置物体

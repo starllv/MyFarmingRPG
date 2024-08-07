@@ -63,6 +63,24 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
 
         Destroy(gameObjectToDelete);
     }
+    // 交换物品栏中的物品位置
+    // inventoryLocation：指示是那个物品栏
+    // fromItem：要交换的物品位置
+    // toItem：最终要要换到的位置
+    public void SwapInventoryItems(InventoryLocation inventoryLocation, int fromItem, int toItem) {
+        // fromItem和toItem要小于当前物品栏的存储的个数，即不能拖到空的物品栏，且两参数不能相等或小于0
+        if (fromItem < inventoryLists[(int)inventoryLocation].Count && toItem < inventoryLists[(int)inventoryLocation].Count
+            && fromItem != toItem && fromItem >= 0 && toItem >= 0) {
+            // 获取物品栏中两个物品
+            InventoryItem fromInventoryItem = inventoryLists[(int)inventoryLocation][fromItem];
+            InventoryItem toInventoryItem = inventoryLists[(int)inventoryLocation][toItem];
+            // 交换位置
+            inventoryLists[(int)inventoryLocation][fromItem] = toInventoryItem;
+            inventoryLists[(int)inventoryLocation][toItem] = fromInventoryItem;
+            // 发出事件，停止物品栏UI进行更新
+            EventHandler.CallInventoryUpdatedEvent(inventoryLocation, inventoryLists[(int)inventoryLocation]);  
+        }
+    }
 
     public int FindItemInInventory(InventoryLocation inventoryLocation, int itemCode) {
         List<InventoryItem> inventoryList = inventoryLists[(int)inventoryLocation];
