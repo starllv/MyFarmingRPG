@@ -4,10 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems; 
 
 // 继承IBeginDragHandler, IDragHandler, IEndDragHandler接口类，用于当拖动事件发生时，能够实现功能；需使用UnityEngine.EventSystems命名空间
+// 使用IPointerEnterHandler, IPointerExitHandler接口，当鼠标点到物品的时候，触发回调函数
 public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Camera mainCamera;      // 获取主摄像机，用于将获取的屏幕输入位置转换到3维世界空间的坐标
-    private Canvas parentCanvas;    // 获取物品槽的父级，即物品栏
+    private Canvas parentCanvas;    // 获取物品槽的父级的Canvas组件
     private Transform parentItem;   // 用于保存Items的父对象的变换组件
     private GameObject draggedItem; // 当武平被拖出UI物品栏时，生成新的拖出物品
 
@@ -24,6 +25,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField] private GameObject inventoryTextBoxPrefab = null; // 用来保存文字框预制件，因为添加了SerializeField参数，所以在unity中的Inspector中可见
 
     private void Awake() {
+        // 用来获取parentCanvas，即父级MainGameUICanvas的Canvas组件
         parentCanvas = GetComponentInParent<Canvas>();
     }
     // 此函数在脚本刚开始运行时运行一次，且运行在Update函数前，即一帧更新之前
@@ -84,7 +86,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 int toSlotNumber = eventData.pointerCurrentRaycast.gameObject.GetComponent<UIInventorySlot>().slotNumber;
                 // 调用InventoryManager中的函数交换当前槽位的物品到鼠标指向的位置
                 InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);                
-            
+                // 删除弹出的物品信息文本框，因为在拖动物品的时候，会生成文本框，在释放物品后，需要删除
                 DestroyInventoryTextBox();
             }
             else {
@@ -98,38 +100,39 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             Player.Instance.EnablePlayerInput();
         }
     }
-
+    // 当鼠标进入UI物品栏范围时触发的函数，需继承IPointerEnterHandler接口
     public void OnPointerEnter(PointerEventData eventData) {
-
+        // 当所指向的物品的数量大于零时执行，若物品为0，则当前物品栏没有物品
         if (itemQuantity != 0) {
-
+            // 在inventoryBar下生成文本框的游戏物体，使用的模板是外部设置的inventoryTextBoxPrefab，位置是当前物品槽的位置，即在所指物品栏的位置生成文本框，旋转设置为单位旋转，即不旋转
             inventoryBar.inventoryTextBoxGameObject = Instantiate(inventoryTextBoxPrefab, transform.position, Quaternion.identity);
+            // 将文本框物体的父级设置为之前获取的存在Canvas组件的游戏物体
             inventoryBar.inventoryTextBoxGameObject.transform.SetParent(parentCanvas.transform, false);
-
+            // 获取该文本框物体的UIInventoryTextBox组件，即我们写的脚本
             UIInventoryTextBox inventoryTextBox = inventoryBar.inventoryTextBoxGameObject.GetComponent<UIInventoryTextBox>();
-
+            // 从物品管理器获取当前物品的类型描述字符串
             string itemTypeDescription = InventoryManager.Instance.GetItemTypeDescription(itemDetails.ItemType);
-
+            // 使用物品信息设置文本框的文字部分
             inventoryTextBox.SetTextboxText(itemDetails.itemDescription, itemTypeDescription, "", itemDetails.itemLongDescription, "", "");
-
+            // 判断物品栏是在底部和底部，因为文本框要根据物品栏的位置改变显示的位置
             if (inventoryBar.IsInventoryBarPositionBottom) {
-
+                // 物品栏在底部时，设置文本框的锚点，并设置其位置
                 inventoryBar.inventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0f);
                 inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
             }
             else {
-
+                // 物品栏在顶部时，设置文本框的锚点，并设置其位置
                 inventoryBar.inventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
                 inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 50f, transform.position.z);
             }
         }
     }
-
+    // 当鼠标离开UI物品栏时调用
     public void OnPointerExit(PointerEventData eventData) {
-
+        // 删除生成的文本框
         DestroyInventoryTextBox();
     }
-
+    // 删除物品文本框的函数
     public void DestroyInventoryTextBox() {
 
         if (inventoryBar.inventoryTextBoxGameObject != null) {

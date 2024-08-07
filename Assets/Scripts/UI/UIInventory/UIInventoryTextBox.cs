@@ -12,7 +12,7 @@ public class UIInventoryTextBox : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textMeshBottom1 = null;
     [SerializeField] private TextMeshProUGUI textMeshBottom2 = null;
     [SerializeField] private TextMeshProUGUI textMeshBottom3 = null;
-
+    // 用于自定义设置文本框的文字内容
     public void SetTextboxText(string textTop1, string textTop2, string textTop3, string textBottom1, string textBottom2, string textBottom3) {
 
         textMeshTop1.text = textTop1;

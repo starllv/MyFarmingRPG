@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 库存管理类，使用单例模式
 public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
 {
-    private Dictionary<int, ItemDetails> itemDetailsDictionary;
-
-    public List<InventoryItem>[] inventoryLists;
-
-    [HideInInspector] public int[] inventoryListCapacityIntArray;
-
-    [SerializeField] private SO_ItemList itemList = null;
+    private Dictionary<int, ItemDetails> itemDetailsDictionary;           // 用于存放物品的字典，键是itemCode，值是物品详细信息
+    public List<InventoryItem>[] inventoryLists;                          // 库存中的物品列表
+    [HideInInspector] public int[] inventoryListCapacityIntArray;         // 用于记录各个仓库的容量的数组，在Inspector中隐藏
+    [SerializeField] private SO_ItemList itemList = null;                 // 物品列表，可被序列化，在Inspector中进行设置
 
     protected override void Awake() {
 
@@ -21,9 +19,11 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
     }
 
     private void CreateInventoryLists() {
+
         inventoryLists = new List<InventoryItem>[(int)InventoryLocation.count];
 
         for (int i = 0; i < (int)InventoryLocation.count; i++) {
+            
             inventoryLists[i] = new List<InventoryItem>();
         }
 
@@ -118,6 +118,7 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
     }
 
     public ItemDetails GetItemDetails(int itemCode) {
+
         ItemDetails itemDetails;
 
         if (itemDetailsDictionary.TryGetValue(itemCode, out itemDetails)) {
