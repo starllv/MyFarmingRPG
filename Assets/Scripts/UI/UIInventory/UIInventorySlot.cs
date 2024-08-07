@@ -4,9 +4,10 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems; 
 
 // 继承IBeginDragHandler, IDragHandler, IEndDragHandler接口类，用于当拖动事件发生时，能够实现功能；需使用UnityEngine.EventSystems命名空间
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Camera mainCamera;      // 获取主摄像机，用于将获取的屏幕输入位置转换到3维世界空间的坐标
+    private Canvas parentCanvas;    // 获取物品槽的父级，即物品栏
     private Transform parentItem;   // 用于保存Items的父对象的变换组件
     private GameObject draggedItem; // 当武平被拖出UI物品栏时，生成新的拖出物品
 
@@ -19,8 +20,12 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     [SerializeField] private UIInventoryBar inventoryBar = null;  // 用于设置物品栏，即物品槽的父级，因为添加了SerializeField参数，所以在unity中的Inspector中可见
     [SerializeField] private GameObject itemPrefab = null;       // 用于设置实例化物品时，使用的物品预制件，因为添加了SerializeField参数，所以在unity中的Inspector中可见
-    [SerializeField] private int slotNumber = 0;                // 记录当前槽位是第几个槽位
-    
+    [SerializeField] private int slotNumber = 0;                // 记录当前槽位是第几个槽位，因为添加了SerializeField参数，所以在unity中的Inspector中可见
+    [SerializeField] private GameObject inventoryTextBoxPrefab = null; // 用来保存文字框预制件，因为添加了SerializeField参数，所以在unity中的Inspector中可见
+
+    private void Awake() {
+        parentCanvas = GetComponentInParent<Canvas>();
+    }
     // 此函数在脚本刚开始运行时运行一次，且运行在Update函数前，即一帧更新之前
     private void Start() {
         // 初始化，获取主摄像机
@@ -79,6 +84,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 int toSlotNumber = eventData.pointerCurrentRaycast.gameObject.GetComponent<UIInventorySlot>().slotNumber;
                 // 调用InventoryManager中的函数交换当前槽位的物品到鼠标指向的位置
                 InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);                
+            
+                DestroyInventoryTextBox();
             }
             else {
                 // 若鼠标指向的位置没有物体，且拖动的物品可以放下，则在鼠标指向的位置放置物体
@@ -89,6 +96,45 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             }
             // 激活角色，可以接受输入
             Player.Instance.EnablePlayerInput();
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+
+        if (itemQuantity != 0) {
+
+            inventoryBar.inventoryTextBoxGameObject = Instantiate(inventoryTextBoxPrefab, transform.position, Quaternion.identity);
+            inventoryBar.inventoryTextBoxGameObject.transform.SetParent(parentCanvas.transform, false);
+
+            UIInventoryTextBox inventoryTextBox = inventoryBar.inventoryTextBoxGameObject.GetComponent<UIInventoryTextBox>();
+
+            string itemTypeDescription = InventoryManager.Instance.GetItemTypeDescription(itemDetails.ItemType);
+
+            inventoryTextBox.SetTextboxText(itemDetails.itemDescription, itemTypeDescription, "", itemDetails.itemLongDescription, "", "");
+
+            if (inventoryBar.IsInventoryBarPositionBottom) {
+
+                inventoryBar.inventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0f);
+                inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 50f, transform.position.z);
+            }
+            else {
+
+                inventoryBar.inventoryTextBoxGameObject.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 1f);
+                inventoryBar.inventoryTextBoxGameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 50f, transform.position.z);
+            }
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+
+        DestroyInventoryTextBox();
+    }
+
+    public void DestroyInventoryTextBox() {
+
+        if (inventoryBar.inventoryTextBoxGameObject != null) {
+
+            Destroy(inventoryBar.inventoryTextBoxGameObject);
         }
     }
 }

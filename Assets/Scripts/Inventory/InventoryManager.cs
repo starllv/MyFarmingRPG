@@ -128,6 +128,44 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         }
     }
 
+    public string GetItemTypeDescription(ItemType itemType) {
+
+        string itemTypeDescription;
+
+        switch (itemType) {
+
+            case ItemType.Breaking_tool:
+                itemTypeDescription = Settings.BreakingTool;
+                break;
+            
+            case ItemType.Chopping_tool:
+                itemTypeDescription = Settings.ChoppingTool;
+                break;
+
+            case ItemType.Hoeing_tool:
+                itemTypeDescription = Settings.HoeingTool;
+                break;
+
+            case ItemType.Reaping_tool:
+                itemTypeDescription = Settings.ReapingTool;
+                break;
+
+            case ItemType.Water_tool:
+                itemTypeDescription = Settings.WateringTool;
+                break;
+
+            case ItemType.Collecting_tool:
+                itemTypeDescription = Settings.CollectingTool;
+                break;
+
+            default:
+                itemTypeDescription = itemType.ToString();
+                break;
+        }
+
+        return itemTypeDescription;
+    }
+
     private void RemoveItemAtPosition(List<InventoryItem> inventoryList, int itemCode, int position) {
 
         InventoryItem inventoryItem = new InventoryItem();

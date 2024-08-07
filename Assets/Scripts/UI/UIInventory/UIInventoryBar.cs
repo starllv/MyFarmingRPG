@@ -7,6 +7,7 @@ public class UIInventoryBar : MonoBehaviour
     [SerializeField] private Sprite blank16x16Sprite = null;
     [SerializeField] private UIInventorySlot[] inventorySlot = null;
     public GameObject inventoryBarDraggedItem;
+    [HideInInspector] public GameObject inventoryTextBoxGameObject;
     private RectTransform rectTransform;
     private bool _isInventoryBarPositionBottom = true;
     public bool IsInventoryBarPositionBottom { get => _isInventoryBarPositionBottom; set => _isInventoryBarPositionBottom = value; }
@@ -66,7 +67,7 @@ public class UIInventoryBar : MonoBehaviour
     }
 
     private void SwitchInventoryBarPosition() {
-        
+
         Vector3 playerViewportPosition = Player.Instance.GetPlayerViewportPosition();
 
         if (playerViewportPosition.y > 0.3f && IsInventoryBarPositionBottom == false) {
