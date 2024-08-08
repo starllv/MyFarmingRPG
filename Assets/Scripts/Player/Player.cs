@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : SingletonMonoBehaviour<Player>
 {
+    private AnimationOverrides animationOverrides;
+
     // Movement Parameters
     private float xInput;
     private float yInput;
@@ -32,6 +35,15 @@ public class Player : SingletonMonoBehaviour<Player>
     private bool idleDown;
     private Camera mainCamera;
 
+    private List<CharacterAttribute> characterAttributeCustomisationList;
+
+    [Tooltip("Should be populated in the prefab with the equipped item sprite renderer")]
+    [SerializeField] private SpriteRenderer equippedItemSpriteRenderer = null;
+
+    private CharacterAttribute armsCharacterAttribute;
+    private CharacterAttribute toolCharacterAttribute;
+
+
     private Rigidbody2D rigidBody2D;
     private Direction playerDirection;
     private float movementSpeed;
@@ -44,6 +56,12 @@ public class Player : SingletonMonoBehaviour<Player>
         base.Awake();
 
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        animationOverrides = GetComponentInChildren<AnimationOverrides>();
+
+        armsCharacterAttribute = new CharacterAttribute(CharacterPartAnimator.arms, PartVariantColour.none, PartVariantType.none);
+
+        characterAttributeCustomisationList = new List<CharacterAttribute>();
 
         mainCamera = Camera.main;
     }
@@ -206,5 +224,35 @@ public class Player : SingletonMonoBehaviour<Player>
     public Vector3 GetPlayerViewportPosition() {
 
         return mainCamera.WorldToViewportPoint(transform.position);
+    }
+
+    public void ShowCarriedItem(int iteCode) {
+
+        ItemDetails itemDetails = InventoryManager.Instance.GetItemDetails(iteCode);
+        if (itemDetails != null) {
+
+            equippedItemSpriteRenderer.sprite = itemDetails.itemSprite;
+            equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 1f);
+
+            armsCharacterAttribute.partVariantType = PartVariantType.carry;
+            characterAttributeCustomisationList.Clear();
+            characterAttributeCustomisationList.Add(armsCharacterAttribute);
+            animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
+
+            isCarrying = true;
+        }
+    }
+
+    public void ClearCarriedItem() {
+
+        equippedItemSpriteRenderer.sprite = null;
+        equippedItemSpriteRenderer.color = new Color(1f, 1f, 1f, 0f);
+
+        armsCharacterAttribute.partVariantType = PartVariantType.none;
+        characterAttributeCustomisationList.Clear();
+        characterAttributeCustomisationList.Add(armsCharacterAttribute);
+        animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
+
+        isCarrying = false;
     }
 }

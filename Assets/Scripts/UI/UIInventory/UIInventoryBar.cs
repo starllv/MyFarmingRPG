@@ -106,7 +106,7 @@ public class UIInventoryBar : MonoBehaviour
             IsInventoryBarPositionBottom = false;
         }
     }
-    // 清除物品槽的高亮效果
+    // 清除所有物品槽的高亮效果
     public void ClearHighlightOnInventorySlots() {
 
         if (inventorySlot.Length > 0) {
@@ -123,7 +123,7 @@ public class UIInventoryBar : MonoBehaviour
             }
         }
     }
-    // 设置物品槽高亮
+    // 遍历物品栏设置物品槽高亮
     public void SetHighlightedInventorySlots() {
 
         if (inventorySlot.Length > 0) {

@@ -1,3 +1,68 @@
+public enum AnimationName
+{
+    idleUp,
+    idleDown,
+    idleLeft,
+    idleRight,
+    walkUp,
+    walkDown,
+    walkLeft,
+    walkRight,
+    runUp,
+    runDown,
+    runLeft,
+    runRight,
+    useToolUp,
+    useToolDown,
+    useToolLeft,
+    useToolRight,
+    swingToolUp,
+    swingToolDown,
+    swingToolLeft,
+    swingToolRight,
+    liftToolUp,
+    liftToolDown,
+    liftToolLeft,
+    liftToolRight,
+    holdToolUp,
+    holdToolDown,
+    holdToolLeft,
+    holdToolRight,
+    pickUp,
+    pickDown,
+    pickLeft,
+    pickRight,
+    count
+}
+
+public enum CharacterPartAnimator
+{
+    body,
+    arms,
+    hair,
+    tool,
+    hat,
+    count
+}
+
+public enum PartVariantColour
+{
+    none,
+    count
+}
+
+public enum PartVariantType
+{
+    none,
+    carry,
+    hoe,
+    pickaxe,
+    axe,
+    scythe,
+    wateringCan,
+    count
+}
+
 public enum ToolEffect
 {
     none,

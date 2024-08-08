@@ -170,22 +170,33 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     // 设置物品槽的物品被选择
     private void SetSelectedItem() {
-
+        // 先清空所有物品槽的选中状态，因为之前可能选择了另一个物品槽
         inventoryBar.ClearHighlightOnInventorySlots();
 
         isSelected = true;
 
         inventoryBar.SetHighlightedInventorySlots();
 
-        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.ItemCode);
+        // InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.ItemCode);
+
+        if(itemDetails.canBeCarried) {
+
+            Player.Instance.ShowCarriedItem(itemDetails.ItemCode);
+        }
+        else {
+
+            Player.Instance.ClearCarriedItem();
+        }
     }
     // 清除物品槽物品被选择
     private void ClearSelectedItem() {
         
         inventoryBar.ClearHighlightOnInventorySlots();
 
-        isSelected = false;
+        // isSelected = false;
 
-        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+        // InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+
+        Player.Instance.ClearCarriedItem();
     }
 }
