@@ -15,10 +15,10 @@ MonoBehaviour:
   itemDetails:
   - ItemCode: 10000
     ItemType: 0
-    itemDescription: Canyon Oak Acon
+    itemDescription: Canyon Oak Acorn
     itemSprite: {fileID: 21300000, guid: 730e572c78cf0244ca0db36bb8f3af7f, type: 3}
-    itemLongDescription: From small acons do large oak trees grow.One day this humble
-      acon could be a towering giant
+    itemLongDescription: From small acorns do large oak trees grow.One day this humble
+      acorn could be a towering giant
     itemUseGridRadius: 2
     itemUseRadius: 0
     isStartingItem: 0
