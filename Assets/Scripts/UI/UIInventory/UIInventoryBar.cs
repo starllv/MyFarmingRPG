@@ -41,6 +41,8 @@ public class UIInventoryBar : MonoBehaviour
                 inventorySlot[i].textMeshProUGUI.text = "";
                 inventorySlot[i].itemDetails = null;
                 inventorySlot[i].itemQuantity = 0;
+
+                SetHighlightedInventorySlots(i);
             }
         }
     }
@@ -67,6 +69,8 @@ public class UIInventoryBar : MonoBehaviour
                             inventorySlot[i].textMeshProUGUI.text = inventoryList[i].itemQuantity.ToString();
                             inventorySlot[i].itemDetails = itemDetails;
                             inventorySlot[i].itemQuantity = inventoryList[i].itemQuantity;
+
+                            SetHighlightedInventorySlots(i);
                         }
                     }
                     else {
@@ -100,6 +104,47 @@ public class UIInventoryBar : MonoBehaviour
             rectTransform.anchoredPosition = new Vector2(0f, -2.5f);
             // 更改物品栏状态
             IsInventoryBarPositionBottom = false;
+        }
+    }
+    // 清除物品槽的高亮效果
+    public void ClearHighlightOnInventorySlots() {
+
+        if (inventorySlot.Length > 0) {
+            // 遍历所以物品槽
+            for (int i = 0; i < inventorySlot.Length; i++) {
+                // 若物品槽被选中，则清除选择，将高亮显示框设为透明，然后通知仓库管理器
+                if (inventorySlot[i].isSelected) {
+
+                    inventorySlot[i].isSelected = false;
+                    inventorySlot[i].inventorySlotHighlight.color = new Color(0f, 0f, 0f, 0f);
+
+                    InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
+                }
+            }
+        }
+    }
+    // 设置物品槽高亮
+    public void SetHighlightedInventorySlots() {
+
+        if (inventorySlot.Length > 0) {
+
+            for (int i = 0; i < inventorySlot.Length; i++) {
+
+                SetHighlightedInventorySlots(i);
+            }
+        }
+    }
+    // 将给定位置的物品槽设置为高亮
+    public void SetHighlightedInventorySlots(int itemPosition) {
+
+        if (inventorySlot.Length > 0 && inventorySlot[itemPosition].itemDetails != null) {
+
+            if (inventorySlot[itemPosition].isSelected) {
+
+                inventorySlot[itemPosition].inventorySlotHighlight.color = new Color(1f, 1f, 1f, 1f);
+                // 更新库存管理器，使物品被选中
+                InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, inventorySlot[itemPosition].itemDetails.ItemCode);
+            }
         }
     }
 }

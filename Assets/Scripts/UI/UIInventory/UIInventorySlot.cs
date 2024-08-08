@@ -1,11 +1,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems; 
+using UnityEngine.EventSystems;
+using System;
 
 // 继承IBeginDragHandler, IDragHandler, IEndDragHandler接口类，用于当拖动事件发生时，能够实现功能；需使用UnityEngine.EventSystems命名空间
 // 使用IPointerEnterHandler, IPointerExitHandler接口，当鼠标点到物品的时候，触发回调函数
-public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private Camera mainCamera;      // 获取主摄像机，用于将获取的屏幕输入位置转换到3维世界空间的坐标
     private Canvas parentCanvas;    // 获取物品槽的父级的Canvas组件
@@ -18,7 +19,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     [HideInInspector] public ItemDetails itemDetails;    // 物品槽存放物品的详细信息，在Unity中的Inspector中隐藏
     [HideInInspector] public int itemQuantity;           // 物品槽存放该物品的数量，在Unity中的Inspector中隐藏
-
+    [HideInInspector] public bool isSelected = false;    // 指示当前物品槽是否被选中
     [SerializeField] private UIInventoryBar inventoryBar = null;  // 用于设置物品栏，即物品槽的父级，因为添加了SerializeField参数，所以在unity中的Inspector中可见
     [SerializeField] private GameObject itemPrefab = null;       // 用于设置实例化物品时，使用的物品预制件，因为添加了SerializeField参数，所以在unity中的Inspector中可见
     [SerializeField] private int slotNumber = 0;                // 记录当前槽位是第几个槽位，因为添加了SerializeField参数，所以在unity中的Inspector中可见
@@ -37,8 +38,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     // 在画面上鼠标位置放置所选的物品
     private void DropSelectedItemAtMousePosition() {
-        // 此处用于判断鼠标选择的物体是否存在，若是空物品槽，则不能放置
-        if (itemDetails != null) {
+        // 此处用于判断鼠标选择的物体是否存在，若是空物品槽，则不能放置；物体若被选中
+        if (itemDetails != null && isSelected) {
             // 屏幕空间到世界空间的转换，参数是输入的鼠标的x，y坐标，及主摄像机的z坐标的负值，输出的是屏幕空间的点在3维空间中的位置
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
             // 实例化要放置的物品，将其放置在获取的3维世界的位置，第一个参数是要实例化的物品，此处使用预制件，第二个参数指定位置，
@@ -50,6 +51,11 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             item.ItemCode = itemDetails.ItemCode;
             // 物品管理器移除player的物品栏中的物品，因为此物品已被拖出外面
             InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+            // 若库存中找不到物品了，即物品被清空，则清除物品槽被选中状态
+            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1) {
+
+                ClearSelectedItem();
+            }
         }
     }
     // 此方法在类继承IBeginDragHandler后的回调函数，当unity输入系统检测到拖动开始前调用
@@ -64,6 +70,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             // 获取draggedItem的子对象的组件，设置为要拖出生成物品的图像
             Image draggedItemImage = draggedItem.GetComponentInChildren<Image>();
             draggedItemImage.sprite = inventorySlotImage.sprite;
+            // 开始拖动物体时，使物体处于选中
+            SetSelectedItem();
         }
     }
     // 此方法在类继承IDragHandler后的回调函数，当unity输入系统检测到拖动过程中调用
@@ -88,6 +96,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
                 InventoryManager.Instance.SwapInventoryItems(InventoryLocation.player, slotNumber, toSlotNumber);                
                 // 删除弹出的物品信息文本框，因为在拖动物品的时候，会生成文本框，在释放物品后，需要删除
                 DestroyInventoryTextBox();
+                // 在物品栏拖动改变物品位置后，清除物品的被选择状态
+                ClearSelectedItem();
             }
             else {
                 // 若鼠标指向的位置没有物体，且拖动的物品可以放下，则在鼠标指向的位置放置物体
@@ -139,5 +149,43 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
             Destroy(inventoryBar.inventoryTextBoxGameObject);
         }
+    }
+    // 鼠标点击UI事件响应，类继承IPointerClickHandler接口类
+    public void OnPointerClick(PointerEventData eventData) {
+        // 左键点击
+        if (eventData.button == PointerEventData.InputButton.Left) {
+            // 物品槽已被选中，则点击后，清除选择
+            if (isSelected) {
+
+                ClearSelectedItem();
+            }
+            else {
+                // 物品槽未被选中且物品数量大于1时，高亮显示物品槽
+                if (itemQuantity > 0) {
+
+                    SetSelectedItem();
+                }
+            }
+        }
+    }
+    // 设置物品槽的物品被选择
+    private void SetSelectedItem() {
+
+        inventoryBar.ClearHighlightOnInventorySlots();
+
+        isSelected = true;
+
+        inventoryBar.SetHighlightedInventorySlots();
+
+        InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.ItemCode);
+    }
+    // 清除物品槽物品被选择
+    private void ClearSelectedItem() {
+        
+        inventoryBar.ClearHighlightOnInventorySlots();
+
+        isSelected = false;
+
+        InventoryManager.Instance.ClearSelectedInventoryItem(InventoryLocation.player);
     }
 }
