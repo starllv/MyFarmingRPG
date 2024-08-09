@@ -78,6 +78,8 @@ public class Player : SingletonMonoBehaviour<Player>
 
             PlayerWalkInput();
 
+            PlayerTestInput();
+
             // Send event to any listeners for player movement input
             EventHandler.CallMovementEvent(xInput, yInput, isWalking, 
                                 isRunning, isIdle, isCarrying, 
@@ -254,5 +256,18 @@ public class Player : SingletonMonoBehaviour<Player>
         animationOverrides.ApplyCharacterCustomisationParameters(characterAttributeCustomisationList);
 
         isCarrying = false;
+    }
+
+    private void PlayerTestInput() {
+
+        if (Input.GetKey(KeyCode.T)) {
+
+            TimeManager.Instance.TestAdvanceGameMinute();
+        }
+
+        if (Input.GetKeyDown(KeyCode.G)) {
+
+            TimeManager.Instance.TestAdvanceGameDay();
+        }
     }
 }
