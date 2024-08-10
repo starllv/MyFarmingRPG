@@ -1026,7 +1026,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.6, y: -8.57, z: -30.066658}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1133,7 +1133,7 @@ MonoBehaviour:
   fadeDuration: 1
   faderCanvasGroup: {fileID: 1784257389}
   faderImage: {fileID: 1784257390}
-  startingSceneName: 0
+  startingSceneName: 1
 --- !u!1001 &657831029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2821,7 +2821,7 @@ Transform:
   m_GameObject: {fileID: 2020053897}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.6, y: -8.57, z: -30.066658}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3932,7 +3932,7 @@ Transform:
   m_GameObject: {fileID: 8537469566956835441}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.6, y: -8.57, z: -20.066658}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

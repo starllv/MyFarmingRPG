@@ -64,6 +64,8 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
     // 脚本开始时调用一次，将画面设置为黑色，之后加载开始场景
     private IEnumerator Start() {
 
+        
+
         faderImage.color = new Color(0f, 0f, 0f, 1f);
         faderCanvasGroup.alpha = 1f;
         // 开始加载开始场景
