@@ -115,6 +115,5 @@ public enum SceneName
 {
     Scene1_Farm,
     Scene2_Field,
-    Scene3_Cabin,
-    count
+    Scene3_Cabin
 }

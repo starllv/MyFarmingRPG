@@ -84,16 +84,16 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
         }
     }
 
-    private IEnumerator ClearAllLoadedScene() {
+    // private IEnumerator ClearAllLoadedScene() {
 
-        for(int i = 0; i < (int)SceneName.count; i++) {
+    //     for(int i = 0; i < (int)SceneName.count; i++) {
 
-            Scene loadedScene = SceneManager.GetSceneByName(((SceneName)i).ToString());
-            if (loadedScene.IsValid()) {
+    //         Scene loadedScene = SceneManager.GetSceneByName(((SceneName)i).ToString());
+    //         if (loadedScene.IsValid()) {
 
-                yield return SceneManager.UnloadSceneAsync(loadedScene.buildIndex);
-            }
-        }
-    }
+    //             yield return SceneManager.UnloadSceneAsync(loadedScene.buildIndex);
+    //         }
+    //     }
+    // }
 
 }
