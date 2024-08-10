@@ -1133,7 +1133,7 @@ MonoBehaviour:
   fadeDuration: 1
   faderCanvasGroup: {fileID: 1784257389}
   faderImage: {fileID: 1784257390}
-  startingSceneName: 1
+  startingSceneName: 0
 --- !u!1001 &657831029
 PrefabInstance:
   m_ObjectHideFlags: 0

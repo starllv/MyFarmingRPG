@@ -64,7 +64,7 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
     // 脚本开始时调用一次，将画面设置为黑色，之后加载开始场景
     private IEnumerator Start() {
 
-        
+        // StartCoroutine(ClearAllLoadedScene());
 
         faderImage.color = new Color(0f, 0f, 0f, 1f);
         faderCanvasGroup.alpha = 1f;
@@ -81,6 +81,18 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
         if (!isFading) {
 
             StartCoroutine(FadeAndSwitchScenes(sceneName, spawnPosition));
+        }
+    }
+
+    private IEnumerator ClearAllLoadedScene() {
+
+        for(int i = 0; i < (int)SceneName.count; i++) {
+
+            Scene loadedScene = SceneManager.GetSceneByName(((SceneName)i).ToString());
+            if (loadedScene.IsValid()) {
+
+                yield return SceneManager.UnloadSceneAsync(loadedScene.buildIndex);
+            }
         }
     }
 
