@@ -3,10 +3,14 @@ using Cinemachine;
 
 public class SwitchConfineBoundingShape : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        SwitchBoundingShape();
+    private void OnEnable() {
+
+        EventHandler.AfterSceneLoadEvent += SwitchBoundingShape;
+    }
+
+    private void OnDisable() {
+
+        EventHandler.AfterSceneLoadEvent -= SwitchBoundingShape;
     }
 
     // 切换cinemachine用来定义屏幕边界的碰撞器

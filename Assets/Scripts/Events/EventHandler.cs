@@ -94,5 +94,43 @@ public static class EventHandler
             }
     }
 
+    // 场景变换事件
+    // 场景卸载之前的谈出事件
+    public static event Action BeforeSceneUnloadFadeOutEvent;
+    public static void CallBeforeSceneUnloadFadeOutEvent() {
+    
+        if (BeforeSceneUnloadFadeOutEvent != null) {
+
+            BeforeSceneUnloadFadeOutEvent();
+        }
+    }
+    // 场景卸载之前的事件
+    public static event Action BeforeSceneUnloadEvent;
+    public static void CallBeforeSceneUnloadEvent() {
+    
+        if (BeforeSceneUnloadEvent != null) {
+
+            BeforeSceneUnloadEvent();
+        }
+    }
+    // 场景加载之后事件
+    public static event Action AfterSceneLoadEvent;
+    public static void CallAfterSceneLoadEvent() {
+    
+        if (AfterSceneLoadEvent != null) {
+
+            AfterSceneLoadEvent();
+        }
+    }
+    // 场景加载之后的淡入事件
+    public static event Action AfterSceneLoadFadeInEvent;
+    public static void CallAfterSceneLoadFadeInEvent() {
+    
+        if (AfterSceneLoadFadeInEvent != null) {
+
+            AfterSceneLoadFadeInEvent();
+        }
+    }
+
 
 }

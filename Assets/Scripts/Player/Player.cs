@@ -269,5 +269,10 @@ public class Player : SingletonMonoBehaviour<Player>
 
             TimeManager.Instance.TestAdvanceGameDay();
         }
+        // 测试场景切换功能
+        if (Input.GetKeyDown(KeyCode.L)) {
+
+            SceneControllerManager.Instance.FadeAndLoadScene(SceneName.Scene1_Farm.ToString(), transform.position);
+        }
     }
 }

@@ -29,12 +29,26 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         // 用来获取parentCanvas，即父级MainGameUICanvas的Canvas组件
         parentCanvas = GetComponentInParent<Canvas>();
     }
+    // 脚本激活时，接受场景加载完成事件，然后调用函数
+    private void OnEnable() {
+
+        EventHandler.AfterSceneLoadEvent += SceneLoaded;
+    }
+
+    private void OnDisable() {
+
+        EventHandler.AfterSceneLoadEvent -= SceneLoaded;
+    }
+
+    public void SceneLoaded() {
+        // 用Tag标签获取游戏中Items的父对象，需要在场景加载完成后进行时因为场景未加载时，可能物体不存在，程序运行时会出错
+        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
+    }
+
     // 此函数在脚本刚开始运行时运行一次，且运行在Update函数前，即一帧更新之前
     private void Start() {
         // 初始化，获取主摄像机
         mainCamera = Camera.main;
-        // 用Tag标签获取游戏中Items的父对象
-        parentItem = GameObject.FindGameObjectWithTag(Tags.ItemsParentTransform).transform;
     }
     // 在画面上鼠标位置放置所选的物品
     private void DropSelectedItemAtMousePosition() {
