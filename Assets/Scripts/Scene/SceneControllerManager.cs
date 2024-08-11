@@ -46,6 +46,8 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
         EventHandler.CallBeforeSceneUnloadFadeOutEvent();
         // 开始将透明度调整到1，即完全不透明，程序在此处暂停，直到Fade函数完成退出才继续运行下面的程序
         yield return StartCoroutine(Fade(1f));
+        // 保存场景数据
+        SaveLoadManager.Instance.StoreCurrentSceneData();
         // 用于改变角色在场景中的位置
         Player.Instance.gameObject.transform.position = spawnPosition;
         // 通知场景卸载前已改变透明度事件
@@ -56,6 +58,8 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
         yield return StartCoroutine(LoadSceneAndSetActive(sceneName));
         // 通知场景加载完事件
         EventHandler.CallAfterSceneLoadEvent();
+        // 回复当前场景数据
+        SaveLoadManager.Instance.RestoreCurrentSceneData();
         // 开始调整透明度到0，即完全透明
         yield return StartCoroutine(Fade(0f));
         // 通知场景加载完成并透明度调整完成
@@ -72,6 +76,8 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
         yield return StartCoroutine(LoadSceneAndSetActive(startingSceneName.ToString()));
         // 通知场景加载完事件
         EventHandler.CallAfterSceneLoadEvent();
+
+        SaveLoadManager.Instance.RestoreCurrentSceneData();
         // 开始将画面调整到透明
         StartCoroutine(Fade(0f));
     }
