@@ -10,7 +10,7 @@ public class SceneControllerManager : SingletonMonoBehaviour<SceneControllerMana
     [SerializeField] private float fadeDuration = 1f;
     [SerializeField] private CanvasGroup faderCanvasGroup = null;
     [SerializeField] private Image faderImage = null;
-    public SceneName startingSceneName;
+    public SceneName startingSceneName;       // 开始场景的名称，由外部进行设置，默认是Scene1_Farm
     // 用于调整透明度的函数
     private IEnumerator Fade(float finalAlpha) {
 

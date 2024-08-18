@@ -56,19 +56,25 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (itemDetails != null && isSelected) {
             // 屏幕空间到世界空间的转换，参数是输入的鼠标的x，y坐标，及主摄像机的z坐标的负值，输出的是屏幕空间的点在3维空间中的位置
             Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
-            // 实例化要放置的物品，将其放置在获取的3维世界的位置，第一个参数是要实例化的物品，此处使用预制件，第二个参数指定位置，
-            // 第三个参数指定旋转，Quaternion.identity代表无旋转， 第四个参数指定其父级
-            GameObject itemGameObject = Instantiate(itemPrefab, worldPosition, Quaternion.identity, parentItem);
-            // 获取物体的Item组件，即自己写的Item脚本
-            Item item = itemGameObject.GetComponent<Item>();
-            // 将item组件的ItemCode参数设置为放置物品的ItemCode
-            item.ItemCode = itemDetails.ItemCode;
-            // 物品管理器移除player的物品栏中的物品，因为此物品已被拖出外面
-            InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
-            // 若库存中找不到物品了，即物品被清空，则清除物品槽被选中状态
-            if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1) {
+            
+            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
+            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
+            // 查看当前网格是否可放置
+            if (gridPropertyDetails != null && gridPropertyDetails.canDropItem) {
+                // 实例化要放置的物品，将其放置在获取的3维世界的位置，第一个参数是要实例化的物品，此处使用预制件，第二个参数指定位置，
+                // 第三个参数指定旋转，Quaternion.identity代表无旋转， 第四个参数指定其父级
+                GameObject itemGameObject = Instantiate(itemPrefab, new Vector3(worldPosition.x, worldPosition.y - Settings.gridCellSize / 2f, worldPosition.z), Quaternion.identity, parentItem);
+                // 获取物体的Item组件，即自己写的Item脚本
+                Item item = itemGameObject.GetComponent<Item>();
+                // 将item组件的ItemCode参数设置为放置物品的ItemCode
+                item.ItemCode = itemDetails.ItemCode;
+                // 物品管理器移除player的物品栏中的物品，因为此物品已被拖出外面
+                InventoryManager.Instance.RemoveItem(InventoryLocation.player, item.ItemCode);
+                // 若库存中找不到物品了，即物品被清空，则清除物品槽被选中状态
+                if (InventoryManager.Instance.FindItemInInventory(InventoryLocation.player, item.ItemCode) == -1) {
 
-                ClearSelectedItem();
+                    ClearSelectedItem();
+                }
             }
         }
     }
