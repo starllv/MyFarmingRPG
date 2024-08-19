@@ -136,6 +136,25 @@ public class InventoryManager : SingletonMonoBehaviour<InventoryManager>
         }
     }
 
+    public ItemDetails GetSelectedInventoryItemDetails(InventoryLocation inventoryLocation) {
+
+        int itemCode = GetSelectedInventoryItem(inventoryLocation);
+
+        if (itemCode == -1) {
+
+            return null;
+        }
+        else {
+
+            return GetItemDetails(itemCode);
+        }
+    }
+
+    private int GetSelectedInventoryItem(InventoryLocation inventoryLocation) {
+
+        return selectedInventoryItem[(int)inventoryLocation];
+    }
+
     public string GetItemTypeDescription(ItemType itemType) {
 
         string itemTypeDescription;

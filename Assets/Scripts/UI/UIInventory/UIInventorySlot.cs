@@ -12,6 +12,7 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Canvas parentCanvas;    // 获取物品槽的父级的Canvas组件
     private Transform parentItem;   // 用于保存Items的父对象的变换组件
     private GameObject draggedItem; // 当武平被拖出UI物品栏时，生成新的拖出物品
+    private GridCursor gridCursor; //
 
     public Image inventorySlotHighlight; // 公开字段，用于设置物品槽高亮显示的图片
     public Image inventorySlotImage;     // 该字段用于设置存放在物品槽物品的图像
@@ -49,18 +50,25 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void Start() {
         // 初始化，获取主摄像机
         mainCamera = Camera.main;
+
+        gridCursor = FindObjectOfType<GridCursor>();
     }
+
+    private void ClearCursors() {
+
+        gridCursor.DisableCursor();
+
+        gridCursor.SelectedItemType = ItemType.none;
+    }
+
     // 在画面上鼠标位置放置所选的物品
     private void DropSelectedItemAtMousePosition() {
         // 此处用于判断鼠标选择的物体是否存在，若是空物品槽，则不能放置；物体若被选中
         if (itemDetails != null && isSelected) {
-            // 屏幕空间到世界空间的转换，参数是输入的鼠标的x，y坐标，及主摄像机的z坐标的负值，输出的是屏幕空间的点在3维空间中的位置
-            Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
-            
-            Vector3Int gridPosition = GridPropertiesManager.Instance.grid.WorldToCell(worldPosition);
-            GridPropertyDetails gridPropertyDetails = GridPropertiesManager.Instance.GetGridPropertyDetails(gridPosition.x, gridPosition.y);
             // 查看当前网格是否可放置
-            if (gridPropertyDetails != null && gridPropertyDetails.canDropItem) {
+            if (gridCursor.CursorPositionIsValid) {
+                // 屏幕空间到世界空间的转换，参数是输入的鼠标的x，y坐标，及主摄像机的z坐标的负值，输出的是屏幕空间的点在3维空间中的位置
+                Vector3 worldPosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -mainCamera.transform.position.z));
                 // 实例化要放置的物品，将其放置在获取的3维世界的位置，第一个参数是要实例化的物品，此处使用预制件，第二个参数指定位置，
                 // 第三个参数指定旋转，Quaternion.identity代表无旋转， 第四个参数指定其父级
                 GameObject itemGameObject = Instantiate(itemPrefab, new Vector3(worldPosition.x, worldPosition.y - Settings.gridCellSize / 2f, worldPosition.z), Quaternion.identity, parentItem);
@@ -197,6 +205,19 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         inventoryBar.SetHighlightedInventorySlots();
 
+        gridCursor.ItemUseGridRadius = itemDetails.itemUseGridRadius;
+
+        if (itemDetails.itemUseGridRadius > 0) {
+
+            gridCursor.EnableCursor();
+        }
+        else {
+
+            gridCursor.DisableCursor();
+        }
+
+        gridCursor.SelectedItemType = itemDetails.ItemType;
+
         // InventoryManager.Instance.SetSelectedInventoryItem(InventoryLocation.player, itemDetails.ItemCode);
 
         if(itemDetails.canBeCarried) {
@@ -210,6 +231,8 @@ public class UIInventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     }
     // 清除物品槽物品被选择
     private void ClearSelectedItem() {
+
+        ClearCursors();
         
         inventoryBar.ClearHighlightOnInventorySlots();
 
