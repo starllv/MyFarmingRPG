@@ -6,12 +6,16 @@ public static class Settings
     public const float fadeInSeconds = 0.25f;
     public const float fadeOutSeconds = 0.35f;
     public const float targetAlpha = 0.45f;
-
+    
+    // 瓦片地图相关
     public const float gridCellSize = 1.0f;
+    public static Vector2 cursorSize = Vector2.one;
 
     // Player Movement
     public const float runningSpeed = 5.333f;
     public const float walkingSpeed = 2.666f;
+    public static float useToolAnimationPause = 0.25f;
+    public static float afterUseToolAnimationPause = 0.2f;
 
     public static int playerInitialInventoryCapacity = 24;
     public static int playerMaximumInventoryCapacity = 48;
